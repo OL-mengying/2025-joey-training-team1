@@ -1,5 +1,42 @@
+using System;
+using System.Collections.Generic;
+using NSubstitute;
+using NUnit.Framework;
+
 namespace TestProject1;
 
+/// <summary>
+/// prompt: 用Nunit framework + NSubstitute產生QueryTotalAmount的測試，startDate = 2025/7/30，endDate = 2025/8/14，mock IBudgetRepo.GetAll回傳[{"202507", 140}, {"202508", 1400}]
+/// </summary>
+[TestFixture]
+public class BudgetManagerTests
+{
+    [Test]
+    public void QueryTotalAmount_CrossTwoMonths_ReturnsCorrectAmount()
+    {
+        // Arrange
+        var repo = Substitute.For<IBudgetRepo>();
+        repo.GetAll().Returns(new List<Budget>
+        {
+            new Budget { YearMonth = "202507", Amount = 140 },
+            new Budget { YearMonth = "202508", Amount = 1400 }
+        });
+
+        var manager = new BudgetManager(repo);
+        var startDate = new DateTime(2025, 7, 30);
+        var endDate = new DateTime(2025, 8, 14);
+
+        // Act
+        var total = manager.QueryTotalAmount(startDate, endDate);
+
+        // 2025/7/30~2025/7/31: 2天, 140/31*2
+        // 2025/8/1~2025/8/14: 14天, 1400/31*14
+        var expected = (140 / 31 * 2) + (1400 / 31 * 14);
+
+        // Assert
+        Assert.AreEqual(expected, total);
+    }
+}
 /// <summary>
 /// prompt: 產生BudgetManager class, 包含方法QueryTotalAmount，input有startDate和endDate，output decimal totalAmount，這個方法會使用BudgetRepo拿到一組Budget，每個Budget包含{string YearMonth, decimal Amount}，totalAmount是把startDate到endDate之間的天數的Amount加總
 /// </summary>
