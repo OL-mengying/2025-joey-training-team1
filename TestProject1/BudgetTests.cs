@@ -32,11 +32,22 @@ public class BudgetManager
         return totalAmount;
     }
 }
-public class BudgetRepo
+public interface IBudgetRepo
+{
+    List<Budget> GetAll();
+}
+
+public class BudgetRepo : IBudgetRepo
 {
     public List<Budget> GetAll()
     {
         // 這裡應該從資料庫或其他來源取得 Budget 資料
         return new List<Budget>();
     }
+}
+
+public class Budget
+{
+    public string YearMonth { get; set; }
+    public decimal Amount { get; set; }
 }
