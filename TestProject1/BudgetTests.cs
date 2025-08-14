@@ -18,8 +18,8 @@ public class BudgetManagerTests
         var repo = Substitute.For<IBudgetRepo>();
         repo.GetAll().Returns(new List<Budget>
         {
-            new Budget { YearMonth = "202507", Amount = 140 },
-            new Budget { YearMonth = "202508", Amount = 1400 }
+            new Budget { YearMonth = "202507", Amount = 310 },
+            new Budget { YearMonth = "202508", Amount = 3100 }
         });
 
         var manager = new BudgetManager(repo);
@@ -29,9 +29,9 @@ public class BudgetManagerTests
         // Act
         var total = manager.QueryTotalAmount(startDate, endDate);
 
-        // 2025/7/30~2025/7/31: 2天, 140/31*2
-        // 2025/8/1~2025/8/14: 14天, 1400/31*14
-        var expected = (140 / 31 * 2) + (1400 / 31 * 14);
+        // 2025/7/30~2025/7/31: 2天, 310/31*2
+        // 2025/8/1~2025/8/14: 14天, 3100/31*14
+        var expected = (310 / 31 * 2) + (3100 / 31 * 14);
 
         // Assert
         Assert.AreEqual(expected, total);
