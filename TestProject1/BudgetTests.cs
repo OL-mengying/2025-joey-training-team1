@@ -5,9 +5,9 @@ namespace TestProject1;
 /// </summary>
 public class BudgetManager
 {
-    private readonly BudgetRepo _budgetRepo;
+    private readonly IBudgetRepo _budgetRepo;
 
-    public BudgetManager(BudgetRepo budgetRepo)
+    public BudgetManager(IBudgetRepo budgetRepo)
     {
         _budgetRepo = budgetRepo;
     }
